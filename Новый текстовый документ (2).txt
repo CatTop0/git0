@@ -1,0 +1,68 @@
+	LibraryEntities libraryEntities = new LibraryEntities();
+        private List<Book> allBooks;
+        private int userRole;
+        private int currentPage = 1;
+        private int _itemsPerPage = 3;
+
+	public static void GenerateCards(TableLayoutPanel tableLayoutPanel1, List<Book> books, int userRole)
+        {
+            User user = new User();
+            int row = 0;
+            foreach (Book book in books)
+            {
+                Panel bookCard = new Panel();
+                bookCard.BorderStyle = BorderStyle.FixedSingle;
+                bookCard.Width = tableLayoutPanel1.ClientSize.Width / 1 - 10;
+                bookCard.Height = 170;
+
+                System.Windows.Forms.Label bookInvenoryNumberLabel = new System.Windows.Forms.Label();
+                bookInvenoryNumberLabel.Text = "Номер:";
+                bookInvenoryNumberLabel.TextAlign = ContentAlignment.MiddleRight;
+                //bookInvenoryNumberLabel.Width = bookImage.Width - 10;
+                bookInvenoryNumberLabel.Top = bookAuthor.Bottom + 5;
+                //bookInvenoryNumberLabel.Left = bookImage.Right - 10;
+                bookCard.Controls.Add(bookInvenoryNumberLabel);
+
+                System.Windows.Forms.Label InvenoryNumber = new System.Windows.Forms.Label();
+                InvenoryNumber.Text = book.BookInvenoryNumber.ToString();
+                InvenoryNumber.TextAlign = ContentAlignment.MiddleLeft;
+                //InvenoryNumber.Width = bookCard.Width - bookImage.Width - 40;
+                InvenoryNumber.Top = bookInvenoryNumberLabel.Top + 0;
+                InvenoryNumber.Left =bookNameLabel.Right + 10;
+                bookCard.Controls.Add(InvenoryNumber);
+
+                };
+                tableLayoutPanel1.Controls.Add(bookCard, row / 1, row % 1);
+                row++;//int row=0;
+            }
+        }
+
+	private void leftBtn_Click(object sender, EventArgs e)
+        {
+            if (currentPage > 1)//private int currentPage = 1;
+            {
+                currentPage--;
+                UpdateProductCards();
+            }
+        }
+
+        private void RightBtn_Click(object sender, EventArgs e)
+        {
+            int totalPages = (int)Math.Ceiling((double)allBooks.Count / _itemsPerPage);
+            if (currentPage < totalPages)
+            {
+                currentPage++;
+                UpdateProductCards();
+            }
+        }
+	private void UpdateProductCards()
+        {
+            
+            int startIndex = (currentPage - 1) * _itemsPerPage;
+            int endIndex = startIndex + _itemsPerPage;
+
+            books = books.Skip(startIndex).Take(_itemsPerPage).ToList();
+            tableLayoutPanel1.Controls.Clear();
+            GenerateCards(tableLayoutPanel1, books, userRole);
+            int count = books.Count;
+        }
